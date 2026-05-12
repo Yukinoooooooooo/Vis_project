@@ -1,0 +1,27 @@
+{
+  "name": "apps-api",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch src/server.ts",
+    "data:refresh": "tsx src/scripts/refreshData.ts",
+    "typecheck": "tsc --noEmit",
+    "build": "tsc",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@risk-map/shared": "file:../../packages/shared",
+    "cors": "^2.8.5",
+    "express": "^5.1.0",
+    "zod": "^4.1.12"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.5",
+    "@types/node": "^24.8.1",
+    "supertest": "^7.1.4",
+    "tsx": "^4.20.6"
+  }
+}
+
