@@ -213,9 +213,9 @@ export function getEventConstellationView(snapshot: RiskSnapshot, requestedEvent
     nodes: allNodes,
     relations: allRelations,
     heatLegend: [
-      { label: "低资金热度", minScore: 0, color: "#38bdf8" },
-      { label: "中资金热度", minScore: 45, color: "#facc15" },
-      { label: "高资金热度", minScore: 70, color: "#fb7185" }
+      { label: "低联动热度", minScore: 0, color: "#38bdf8" },
+      { label: "中联动热度", minScore: 45, color: "#facc15" },
+      { label: "高联动热度", minScore: 70, color: "#fb7185" }
     ],
     lagLegend: [
       { label: "同步/近实时", maxLagDays: 1, color: "#14b8a6" },
@@ -397,7 +397,7 @@ export function getNodeExposureView(snapshot: RiskSnapshot, eventId: string, nod
       const levelItems = exposures.filter((exposure) => exposure.exposureLevel === level);
       return {
         groupKey: level as "core" | "indirect" | "weak",
-        groupLabel: level === "core" ? "核心暴露" : level === "indirect" ? "间接暴露" : "弱相关暴露",
+        groupLabel: level === "core" ? "重点点名" : level === "indirect" ? "间接相关" : "弱相关",
         itemCount: levelItems.length,
         items: levelItems
       };

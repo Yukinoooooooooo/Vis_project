@@ -7,7 +7,7 @@ import { getEventConstellationView } from "../services/viewService";
 
 describe("snapshot authenticity guard", () => {
 
-  it("prioritizes SpaceX financial hotspot as the default constellation center", () => {
+  it("prioritizes SpaceX hot event as the default constellation center", () => {
     const records = [
       ...parseOpenFda(
         {

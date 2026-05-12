@@ -2,6 +2,7 @@ import { Activity, Bell, FileText, GitBranch, Home, Map, Orbit, Radar, RefreshCw
 import { useEffect, useState, type ReactNode } from "react";
 import { NavLink } from "react-router-dom";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { PRODUCT_BRANDING } from "@risk-map/shared";
 import { refreshData } from "../services/api";
 import { useWorkspaceStore } from "../stores/workspace";
 
@@ -34,7 +35,7 @@ export function WorkspaceLayout({ children }: { children: ReactNode }) {
       <aside className="sidebar">
         <div className="brand">
           <Map size={22} />
-          <span>热点扩散分析</span>
+          <span>{PRODUCT_BRANDING.sidebarName}</span>
         </div>
         <nav className="nav">
           {navItems.map((item) => (
@@ -56,7 +57,7 @@ export function WorkspaceLayout({ children }: { children: ReactNode }) {
               {context.currentNodeId ? (
                 <NavLink to={`/events/${context.currentEventId}/nodes/${context.currentNodeId}`} className={({ isActive }) => `nav-item ${isActive ? "active" : ""}`}>
                   <Activity size={18} />
-                  <span>节点暴露</span>
+                  <span>联动节点</span>
                 </NavLink>
               ) : null}
               <NavLink to={`/events/${context.currentEventId}/evidence?targetType=event&targetId=${context.currentEventId}`} className={({ isActive }) => `nav-item ${isActive ? "active" : ""}`}>
@@ -71,13 +72,13 @@ export function WorkspaceLayout({ children }: { children: ReactNode }) {
         <header className={`topbar ${isScrolled ? "topbar-scrolled" : ""}`}>
           <div className="context-strip">
             <span className="context-label">当前对象</span>
-            <strong>{context.currentEventName ?? "SpaceX 事件窗分析"}</strong>
+            <strong>{context.currentEventName ?? "SpaceX 科技板联动分析"}</strong>
             <span>{context.currentWindowLabel ?? "等待公开数据快照"}</span>
           </div>
           <div className="topbar-actions">
             <div className="search-box">
               <Search size={16} />
-              <span>事件、指标、证据</span>
+              <span>热点、板块、证据</span>
             </div>
             <button className="icon-button" onClick={() => refreshMutation.mutate()} title="刷新公开数据" type="button">
               <RefreshCw size={17} className={refreshMutation.isPending ? "spin" : ""} />

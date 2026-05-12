@@ -213,7 +213,7 @@ function buildEvidence(events: RiskEvent[], nodes: RiskNode[], edges: RiskEdge[]
     sourceType: event.sourceTrace.sourceType,
     evidenceLevel: "E3",
     factType: "directFact",
-    boundaryHint: "该卡片仅说明公开源记录了该事件，不单独证明产业链因果关系。",
+    boundaryHint: "该卡片仅说明公开源记录了该事件，不单独证明热点事件与科技板块异动之间存在强因果关系。",
     quoteFields: event.sourceTrace.fieldPath ? [event.sourceTrace.fieldPath] : [],
     supportsJudgmentIds: [`asm_${event.eventId}`],
     comparisonHint: null,
@@ -229,7 +229,7 @@ function buildEvidence(events: RiskEvent[], nodes: RiskNode[], edges: RiskEdge[]
       objectType: "node",
       objectId: edge.sourceNodeId,
       objectName: `${source?.nodeName ?? edge.sourceNodeId} -> ${target?.nodeName ?? edge.targetNodeId}`,
-      phenomenon: `系统基于规则“${edge.ruleId}”生成传播边：${edge.relationType}。`,
+      phenomenon: `系统基于规则“${edge.ruleId}”生成联动传播边：${edge.relationType}。`,
       capturedAt: edge.sourceTrace.fetchedAt,
       sourceName: edge.sourceTrace.sourceName,
       sourceType: edge.sourceTrace.sourceType,
@@ -255,7 +255,7 @@ function buildEvidence(events: RiskEvent[], nodes: RiskNode[], edges: RiskEdge[]
     sourceType: exposure.sourceTrace.sourceType,
     evidenceLevel: "E3",
     factType: exposure.factType,
-    boundaryHint: "企业被公开源点名不等同于财务影响，需结合后续披露和信号验证。",
+    boundaryHint: "企业被公开源点名不等同于股价或经营影响，需结合后续披露和事件窗信号验证。",
     quoteFields: [exposure.sourceTrace.fieldPath],
     supportsJudgmentIds: [`asm_${exposure.companyId}`],
     comparisonHint: null,
@@ -286,7 +286,7 @@ function buildAssessments(
       targetName: event.title,
       judgmentText: event.financialMetric
         ? `按事件窗计算，${event.financialMetric.proxyVariable} 峰值 z-score 为 ${event.financialMetric.peakZScore}，峰值日 ${event.financialMetric.peakDate}；这是代理变量观察，不作因果结论。`
-        : `公开源显示该事件涉及 ${eventNodes.length} 个可追溯节点；目前应作为风险观察对象，而非确定性因果结论。`,
+        : `公开源显示该事件涉及 ${eventNodes.length} 个可追溯联动节点；目前应作为热点联动观察对象，而非确定性因果结论。`,
       judgmentLevel: event.severityLevel === "critical" ? "J3" : event.severityLevel === "high" ? "J2" : "J1",
       evidenceLevel: evidenceIds.length >= 3 ? "E3" : "E2",
       boundaryHint: "判断强度受限于公开源覆盖范围和字段粒度。",
@@ -301,10 +301,10 @@ function buildAssessments(
     targetType: "company",
     targetId: exposure.companyId,
     targetName: exposure.companyName,
-    judgmentText: `公开源直接点名 ${exposure.companyName}，可作为核心暴露对象进入观察名单。`,
+    judgmentText: `公开源直接点名 ${exposure.companyName}，可作为重点观察对象进入观察名单。`,
     judgmentLevel: exposure.exposureLevel === "core" ? "J2" : "J1",
     evidenceLevel: "E3",
-    boundaryHint: "该判断仅说明公开记录中的暴露关系，不构成经营或投资影响判断。",
+    boundaryHint: "该判断仅说明公开记录中的点名关系，不构成经营或投资影响判断。",
     evidenceIds: evidenceCards.filter((card) => card.objectId === exposure.companyId).map((card) => card.evidenceId),
     sourceTrace: exposure.sourceTrace
   }));

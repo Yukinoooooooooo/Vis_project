@@ -58,14 +58,14 @@ export function EventOverviewPage() {
 
       <section className="panel">
         <div className="section-title">
-          <h2>风险总览</h2>
+          <h2>联动总览</h2>
           <SeverityBadge level={data.header.severityLevel} />
         </div>
         <div className="overview-grid">
           <Metric label="判断等级" value={<JudgmentBadge level={data.overview.judgmentLevel} />} />
           <Metric label="证据等级" value={<EvidenceBadge level={data.overview.evidenceLevel} />} />
-          <Metric label="影响节点" value={data.overview.affectedNodeCount} />
-          <Metric label="暴露企业" value={data.overview.affectedCompanyCount} />
+          <Metric label="联动节点" value={data.overview.affectedNodeCount} />
+          <Metric label="点名对象" value={data.overview.affectedCompanyCount} />
         </div>
         <p className="boundary">{data.overview.boundaryHint}</p>
       </section>

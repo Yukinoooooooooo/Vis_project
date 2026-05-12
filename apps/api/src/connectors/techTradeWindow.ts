@@ -167,7 +167,7 @@ export function parseTechTradeWindow(payload: CensusResponse, fetchedAt: string,
         header,
         rows: totalRows,
         financialMetric: {
-          metricName: `${layerLabel}资金热度 z-score`,
+          metricName: `${layerLabel}联动热度 z-score`,
           proxyVariable: `Census GEN_VAL_MO monthly import value, HS ${options.hsCode}`,
           eventDate: options.eventDate,
           eventWindow: { start: options.eventWindowStart, end: options.eventWindowEnd },

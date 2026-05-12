@@ -46,7 +46,7 @@ export function NodeExposurePage() {
     <div className="page two-column">
       <div className="page-header full-span">
         <div>
-          <p className="eyebrow">节点与暴露</p>
+          <p className="eyebrow">科技链联动节点</p>
           <h1>{data.nodeCard.nodeName}</h1>
           <p className="lead">{data.nodeCard.summary}</p>
         </div>
@@ -75,7 +75,7 @@ export function NodeExposurePage() {
 
       <section className="panel">
         <div className="section-title">
-          <h2>上下游影响链</h2>
+          <h2>联动路径</h2>
           <span>{data.upstreamDownstream.upstreamNodes.length + data.upstreamDownstream.downstreamNodes.length} 个相邻节点</span>
         </div>
         <div className="node-mini-list">
@@ -90,7 +90,7 @@ export function NodeExposurePage() {
 
       <section className="panel full-span">
         <div className="section-title">
-          <h2>暴露对象</h2>
+          <h2>点名对象</h2>
           <span>只展示公开源可追溯对象</span>
         </div>
         <div className="exposure-grid">

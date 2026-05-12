@@ -21,7 +21,7 @@ type ReliefWebResponse = {
 };
 
 const endpoint =
-  "https://api.reliefweb.int/v2/disasters?appname=industry-risk-map&limit=8&preset=latest&fields[include][]=name&fields[include][]=status&fields[include][]=type&fields[include][]=country&fields[include][]=date&fields[include][]=url";
+  "https://api.reliefweb.int/v2/disasters?appname=hot-event-tech-board-linkage&limit=8&preset=latest&fields[include][]=name&fields[include][]=status&fields[include][]=type&fields[include][]=country&fields[include][]=date&fields[include][]=url";
 
 export const reliefWebConnector: Connector = {
   descriptor: {

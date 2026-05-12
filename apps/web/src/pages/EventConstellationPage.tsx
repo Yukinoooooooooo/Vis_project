@@ -67,7 +67,7 @@ export function EventConstellationPage() {
                   <dd>{kindLabel(selectedNode.kind)}</dd>
                 </div>
                 <div>
-                  <dt>资金热度</dt>
+                  <dt>联动热度</dt>
                   <dd>{selectedNode.heatScore}</dd>
                 </div>
                 <div>
@@ -172,7 +172,7 @@ function Metric({ icon, label, value }: { icon: ReactNode; label: string; value:
 function kindLabel(kind: string): string {
   if (kind === "focusEvent") return "中心热点事件";
   if (kind === "relatedEvent") return "相关事件";
-  if (kind === "chainNode") return "产业链节点";
+  if (kind === "chainNode") return "科技链/板块节点";
   return "公开来源";
 }
 

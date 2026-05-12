@@ -6,12 +6,12 @@ const centerEventDate = "2024-10-13T00:00:00.000Z";
 
 export const spacexConnector: Connector = {
   descriptor: {
-    sourceName: "SpaceX Public Financial Event Timeline",
+    sourceName: "SpaceX Public Hot Event Timeline",
     sourceType: "news",
     endpoint: flight5SourceUrl,
     documentationUrl: flight5SourceUrl,
     auth: "none",
-    licenseNote: "Public SpaceX, FAA, and financial reporting URLs; used only as sourced event facts with transparent source links."
+    licenseNote: "Public SpaceX, FAA, and market reporting URLs; used only as sourced event facts with transparent source links."
   },
   async fetchRecords() {
     const fetchedAt = isoNow();
@@ -27,7 +27,7 @@ export function parseSpacexStarshipFlight5(fetchedAt: string): SourceRecord[] {
       rawRecordId: "faa-starship-flight-5-license-review-2024-08-06",
       title: "FAA review becomes a pre-event regulatory signal for Starship Flight 5",
       summary:
-        "FAA public statements are used as a pre-event regulatory risk signal before Starship Flight 5; the system treats this as context for financing and industry-chain expectations, not as a market-price fact.",
+        "FAA public statements are used as a pre-event regulatory signal before Starship Flight 5; the system treats this as context for launch cadence and technology-board expectations, not as a market-price fact.",
       occurredAt: "2024-08-06T00:00:00.000Z",
       tags: ["spacex", "starship", "financial-hotspot", "regulatory-risk", "pre-event", "technology-chain", "aerospace"],
       severityHint: "medium",
@@ -36,7 +36,7 @@ export function parseSpacexStarshipFlight5(fetchedAt: string): SourceRecord[] {
       regionName: "United States",
       quotedFields: [
         { fieldPath: "source.kind", value: "FAA public statement index" },
-        { fieldPath: "analysisRole", value: "pre-event regulatory signal for financial risk map" }
+        { fieldPath: "analysisRole", value: "pre-event regulatory signal for technology-board linkage dashboard" }
       ],
       rawFields: {
         analysisDesign: {
@@ -52,7 +52,7 @@ export function parseSpacexStarshipFlight5(fetchedAt: string): SourceRecord[] {
       rawRecordId: "faa-starship-flight-5-license-timing-2024-09-12",
       title: "FAA license timing statement adds uncertainty before Starship Flight 5",
       summary:
-        "The FAA timing statement is captured as an uncertainty event in the SpaceX financing and technology-chain window, because regulatory timing can affect expected launch cadence and supplier demand expectations.",
+        "The FAA timing statement is captured as an uncertainty event in the SpaceX hot-event and technology-chain window, because regulatory timing can affect expected launch cadence and supplier demand expectations.",
       occurredAt: "2024-09-12T00:00:00.000Z",
       tags: ["spacex", "starship", "financial-hotspot", "regulatory-risk", "pre-event", "technology-chain", "aerospace"],
       severityHint: "medium",
@@ -131,7 +131,7 @@ export function parseSpacexStarshipFlight5(fetchedAt: string): SourceRecord[] {
       rawRecordId: "cnbc-spacex-valuation-350b-2024-12-11",
       title: "SpaceX reported valuation reaches about $350B in secondary sale reporting",
       summary:
-        "Public financial reporting about a SpaceX secondary-share sale is used as a later financing signal; it is shown as a sourced market-observation event, not as investment advice or a causal conclusion from Flight 5.",
+        "Public market reporting about a SpaceX secondary-share sale is used as a later attention signal; it is shown as a sourced market-observation event, not as investment advice or a causal conclusion from Flight 5.",
       occurredAt: "2024-12-11T00:00:00.000Z",
       tags: ["spacex", "financial-hotspot", "valuation", "secondary-sale", "post-event", "market-observation", "technology-chain"],
       severityHint: "high",
@@ -140,7 +140,7 @@ export function parseSpacexStarshipFlight5(fetchedAt: string): SourceRecord[] {
       regionName: "United States",
       quotedFields: [
         { fieldPath: "reported.valuation", value: "about USD 350 billion" },
-        { fieldPath: "analysisRole", value: "post-event financing signal for risk map" }
+        { fieldPath: "analysisRole", value: "post-event market attention signal for technology-board linkage dashboard" }
       ],
       rawFields: {
         analysisDesign: {

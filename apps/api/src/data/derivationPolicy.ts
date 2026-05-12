@@ -2,20 +2,20 @@ import type { DerivationPolicy } from "@risk-map/shared";
 
 export const derivationPolicy: DerivationPolicy = {
   summary:
-    "页面只把公开源直接返回的字段展示为 directFact；异常分值由公开字段按固定规则计算为 computedSignal；传播边和暴露推断必须显示 ruleDerived 规则。",
+    "页面只把公开源直接返回的字段展示为 directFact；事件窗异动分值由公开字段按固定规则计算为 computedSignal；传播边和联动对象推断必须显示 ruleDerived 规则。",
   allowedFactTypes: ["directFact", "computedSignal", "ruleDerived"],
   rules: [
     {
       ruleId: "source-record-to-event",
-      label: "公开记录生成风险事件",
+      label: "公开记录生成热点事件",
       description: "把公开 API 的新闻、召回、灾害、披露或统计记录转换为事件卡；标题、时间和摘要必须来自原始字段。",
       factType: "directFact",
       requiredInputs: ["SourceRecord.title", "SourceRecord.sourceUrl", "SourceRecord.quotedFields"]
     },
     {
       ruleId: "source-fields-to-chain-nodes",
-      label: "来源字段映射为产业节点",
-      description: "将产品/商品、企业/机构、地区字段映射为节点；节点名称仍取自公开源字段。",
+      label: "来源字段映射为科技链/板块节点",
+      description: "将产品/商品、企业/机构、地区字段映射为联动节点；节点名称仍取自公开源字段。",
       factType: "ruleDerived",
       requiredInputs: ["productOrCommodityName", "primaryEntityName", "regionName"]
     },
@@ -42,18 +42,17 @@ export const derivationPolicy: DerivationPolicy = {
     },
     {
       ruleId: "financial-hotspot-focus-selection",
-      label: "金融热点优先中心事件",
-      description: "默认星图优先选择带 financial-hotspot/center-hotspot 标签的公开事件，再连接真实时间序列代理指标。",
+      label: "国际热点优先中心事件",
+      description: "默认星图优先选择带中心热点标签的公开热点事件，再连接科技链时间序列代理指标。",
       factType: "ruleDerived",
       requiredInputs: ["themeTags", "financialMetric", "sourceTrace"]
     },
     {
       ruleId: "named-firm-to-exposure",
-      label: "被公开源点名的企业形成核心暴露",
-      description: "FDA、NHTSA、SEC 等公开源直接点名公司或机构时，生成核心暴露项。",
+      label: "被公开源点名的企业形成重点观察对象",
+      description: "FDA、NHTSA、SEC 等公开源直接点名公司或机构时，生成重点观察项。",
       factType: "directFact",
       requiredInputs: ["primaryEntityName", "sourceUrl"]
     }
   ]
 };
-

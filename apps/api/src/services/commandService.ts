@@ -62,10 +62,10 @@ export function buildReportOutline(snapshot: RiskSnapshot, eventId: string): { m
         ? edges.map((edge) => `- ${edge.relationType}（${edge.derivationType} / ${edge.ruleId}）`).join("\n")
         : "- 当前公开字段不足以形成传播路径。",
       "",
-      `## 核心暴露对象`,
+      `## 重点观察对象`,
       exposures.length
         ? exposures.map((exposure) => `- ${exposure.companyName}：${exposure.reason}`).join("\n")
-        : "- 当前没有公开源直接点名的企业暴露对象。",
+        : "- 当前没有公开源直接点名的企业或机构。",
       "",
       `## 证据依据`,
       evidence.map((card) => `- [${card.sourceName}](${card.sourcePreviewUrl})：${card.phenomenon}`).join("\n"),
@@ -95,4 +95,3 @@ function resolveTarget(
   if (!exposure) throw new ViewError(404, 4004, `企业不存在：${input.targetId}`);
   return { targetName: exposure.companyName, latestSignal: exposure.reason, sourceUrl: exposure.sourceUrl };
 }
-

@@ -1,4 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
+import { PRODUCT_BRANDING } from "@risk-map/shared";
 import { ArrowRight, Database, ExternalLink, ShieldCheck } from "lucide-react";
 import { Link } from "react-router-dom";
 import { FactBadge } from "../components/FactBadge";
@@ -31,11 +32,11 @@ export function RadarPage() {
     <div className="page radar-grid">
       <div className="page-header full-span">
         <div>
-          <p className="eyebrow">SpaceX 事件窗分析</p>
-          <h1>SpaceX 热点后的科技链指标响应</h1>
+          <p className="eyebrow">{PRODUCT_BRANDING.name}</p>
+          <h1>国际热点事件后的科技板块联动</h1>
         </div>
         <div className="header-stats">
-          <Metric label="事件/指标" value={data.summary.eventCount} />
+          <Metric label="热点/指标" value={data.summary.eventCount} />
           <Metric label="高异常" value={data.summary.highSeverityCount} />
           <Metric label="显著响应" value={data.summary.expandingCount} />
           <Metric label="复核对象" value={data.summary.watchRelatedCount} />
@@ -46,7 +47,7 @@ export function RadarPage() {
 
       <section className="panel event-list-panel">
         <div className="section-title">
-          <h2>热点与指标列表</h2>
+          <h2>热点事件与科技链指标</h2>
           <span>{data.context.windowLabel}</span>
         </div>
         {data.items.length ? (
@@ -66,7 +67,7 @@ export function RadarPage() {
                   ))}
                 </div>
                 <div className="card-footer">
-                  <span>{item.affectedNodeCount} 节点 / {item.affectedCompanyCount} 企业</span>
+                  <span>{item.affectedNodeCount} 联动节点 / {item.affectedCompanyCount} 点名对象</span>
                   <ArrowRight size={16} />
                 </div>
               </Link>
@@ -129,8 +130,7 @@ function EmptyRadar() {
   return (
     <div className="empty-state">
       <h3>还没有事件窗数据快照</h3>
-      <p>点击右上角刷新公开数据，或运行 npm run data:refresh 生成 SpaceX 事件窗快照。</p>
+      <p>点击右上角刷新公开数据，或运行 npm run data:refresh 生成热点事件与科技板联动快照。</p>
     </div>
   );
 }
-
