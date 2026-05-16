@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { BellPlus, ExternalLink } from "lucide-react";
+import { BellPlus, ExternalLink, Star } from "lucide-react";
 import { Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import { Link, useParams } from "react-router-dom";
 import { FactBadge } from "../components/FactBadge";
@@ -67,6 +67,11 @@ export function NodeExposurePage() {
           <JudgmentBadge level={data.nodeCard.judgmentLevel} />
           <EvidenceBadge level={data.nodeCard.evidenceLevel} />
         </div>
+        <div style={{ marginTop: 8 }}>
+          <span style={{ fontSize: 13, color: "var(--studio-muted)" }}>
+            节点类型：{data.nodeCard.nodeType} · 首次异常：{new Date(data.nodeCard.firstAbnormalAt).toLocaleString()}
+          </span>
+        </div>
         <p className="boundary">{data.nodeCard.boundaryHint}</p>
         <a className="inline-link" href={data.nodeCard.sourceUrl} target="_blank" rel="noreferrer">
           查看原始来源 <ExternalLink size={14} />
@@ -78,14 +83,54 @@ export function NodeExposurePage() {
           <h2>联动路径</h2>
           <span>{data.upstreamDownstream.upstreamNodes.length + data.upstreamDownstream.downstreamNodes.length} 个相邻节点</span>
         </div>
-        <div className="node-mini-list">
-          {[...data.upstreamDownstream.upstreamNodes, ...data.upstreamDownstream.downstreamNodes].map((node) => (
-            <Link key={node.nodeId} to={`/events/${eventId}/nodes/${node.nodeId}`}>
-              <strong>{node.nodeName}</strong>
-              <span>{node.relationType}</span>
-            </Link>
-          ))}
-        </div>
+
+        {data.upstreamDownstream.upstreamNodes.length > 0 ? (
+          <>
+            <div className="section-title" style={{ marginTop: 0 }}>
+              <span style={{ fontSize: 13, color: "var(--studio-muted)" }}>上游节点 ({data.upstreamDownstream.upstreamNodes.length})</span>
+            </div>
+            <div className="node-mini-list" style={{ marginBottom: 12 }}>
+              {data.upstreamDownstream.upstreamNodes.map((node) => (
+                <Link key={node.nodeId} to={`/events/${eventId}/nodes/${node.nodeId}`}>
+                  <strong>{node.nodeName}</strong>
+                  <span>{node.relationType}</span>
+                </Link>
+              ))}
+            </div>
+          </>
+        ) : null}
+
+        {data.upstreamDownstream.downstreamNodes.length > 0 ? (
+          <>
+            <div className="section-title" style={{ marginTop: 0 }}>
+              <span style={{ fontSize: 13, color: "var(--studio-muted)" }}>下游节点 ({data.upstreamDownstream.downstreamNodes.length})</span>
+            </div>
+            <div className="node-mini-list">
+              {data.upstreamDownstream.downstreamNodes.map((node) => (
+                <Link key={node.nodeId} to={`/events/${eventId}/nodes/${node.nodeId}`}>
+                  <strong>{node.nodeName}</strong>
+                  <span>{node.relationType}</span>
+                </Link>
+              ))}
+            </div>
+          </>
+        ) : null}
+
+        {data.upstreamDownstream.keyBridgeNodes.length > 0 ? (
+          <>
+            <div className="section-title" style={{ marginTop: 12, marginBottom: 8 }}>
+              <span style={{ fontSize: 13, color: "var(--studio-muted)" }}>关键桥接节点 ({data.upstreamDownstream.keyBridgeNodes.length})</span>
+            </div>
+            <div className="node-mini-list">
+              {data.upstreamDownstream.keyBridgeNodes.map((node) => (
+                <Link key={node.nodeId} to={`/events/${eventId}/nodes/${node.nodeId}`}>
+                  <strong>{node.nodeName}</strong>
+                  <span>{node.relationType}</span>
+                </Link>
+              ))}
+            </div>
+          </>
+        ) : null}
       </section>
 
       <section className="panel full-span">
@@ -103,6 +148,11 @@ export function NodeExposurePage() {
                     <div>
                       <strong>{item.companyName}</strong>
                       <p>{item.reason}</p>
+                      <div className="badge-row" style={{ marginTop: 4 }}>
+                        <span className="status-pill">{item.exposureLevel}</span>
+                        <span className="status-pill">{item.signalStatus}</span>
+                        {item.isInWatchlist ? <Star size={14} fill="currentColor" /> : null}
+                      </div>
                     </div>
                     <div className="badge-row">
                       <FactBadge factType={item.factType} />
@@ -131,6 +181,41 @@ export function NodeExposurePage() {
             <Line type="monotone" dataKey="value" stroke="#0f766e" strokeWidth={2} dot />
           </LineChart>
         </ResponsiveContainer>
+      </section>
+
+      {data.companyPreview ? (
+        <section className="panel full-span">
+          <div className="section-title">
+            <h2>公司预览</h2>
+          </div>
+          <div className="exposure-item">
+            <div>
+              <strong>{data.companyPreview.companyName}</strong>
+              <p>{data.companyPreview.reason}</p>
+            </div>
+            <a className="inline-link" href={data.companyPreview.sourceUrl} target="_blank" rel="noreferrer">
+              查看来源 <ExternalLink size={14} />
+            </a>
+          </div>
+        </section>
+      ) : null}
+
+      <section className="panel full-span">
+        <div className="section-title">
+          <h2>推导策略</h2>
+        </div>
+        <div className="policy-list">
+          <div className="policy-item">
+            <p>{data.derivationPolicy.summary}</p>
+          </div>
+          {data.derivationPolicy.rules.map((rule) => (
+            <div key={rule.ruleId} className="policy-item">
+              <FactBadge factType={rule.factType} />
+              <strong>{rule.label}</strong>
+              <p>{rule.description}</p>
+            </div>
+          ))}
+        </div>
       </section>
 
       <SourceTraceList traces={data.sourceTrace} />

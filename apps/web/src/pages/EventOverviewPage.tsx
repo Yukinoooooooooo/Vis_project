@@ -1,8 +1,9 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { BellPlus, FileText, GitBranch, Layers } from "lucide-react";
+import { BellPlus, ExternalLink, FileText, GitBranch, Globe, Layers, Loader2, Star } from "lucide-react";
 import type { ReactNode } from "react";
 import { Link, useParams } from "react-router-dom";
 import { EvidenceBadge, JudgmentBadge, SeverityBadge } from "../components/LevelBadge";
+import { FactBadge } from "../components/FactBadge";
 import { ErrorState } from "../components/ErrorState";
 import { LoadingState } from "../components/LoadingState";
 import { NoticePanel } from "../components/NoticePanel";
@@ -41,17 +42,33 @@ export function EventOverviewPage() {
         <div>
           <p className="eyebrow">事件详情</p>
           <h1>{data.header.title}</h1>
+          <div className="tag-row" style={{ marginTop: 8 }}>
+            <span className="status-pill">{data.header.status}</span>
+            {data.header.isInWatchlist ? <Star size={16} fill="currentColor" /> : null}
+            {data.header.themeTags.map((tag) => (
+              <span key={tag}>{tag}</span>
+            ))}
+          </div>
           <p className="lead">{data.header.summary}</p>
+          <div className="badge-row" style={{ marginTop: 4 }}>
+            <Globe size={14} />
+            <span style={{ fontSize: 13, color: "var(--studio-muted)" }}>
+              {data.header.source} · {new Date(data.header.occurredAt).toLocaleString()}
+            </span>
+          </div>
         </div>
         <div className="action-row">
           <button className="primary-button" onClick={() => watchMutation.mutate()} type="button">
             <BellPlus size={17} />
             加入观察
           </button>
-          <button className="secondary-button" onClick={() => reportMutation.mutate()} type="button">
-            <FileText size={17} />
-            生成表达骨架
+          <button className="secondary-button" onClick={() => reportMutation.mutate()} type="button" disabled={reportMutation.isPending}>
+            {reportMutation.isPending ? <Loader2 className="spin" size={17} /> : <FileText size={17} />}
+            {reportMutation.isPending ? "生成中…" : "生成表达骨架"}
           </button>
+          {reportMutation.isError ? (
+            <span style={{ color: "#ff8ac7", fontSize: 13 }}>生成失败：{reportMutation.error.message}</span>
+          ) : null}
         </div>
       </div>
       <NoticePanel notices={data.partialDataNotice} />
@@ -66,8 +83,10 @@ export function EventOverviewPage() {
           <Metric label="证据等级" value={<EvidenceBadge level={data.overview.evidenceLevel} />} />
           <Metric label="联动节点" value={data.overview.affectedNodeCount} />
           <Metric label="点名对象" value={data.overview.affectedCompanyCount} />
+          <Metric label="扩散路径" value={data.overview.expandingPathCount} />
         </div>
         <p className="boundary">{data.overview.boundaryHint}</p>
+        <p style={{ fontSize: 13, color: "var(--studio-muted)", marginTop: 8 }}>最新窗口变化：{data.overview.latestWindowChange}</p>
       </section>
 
       <section className="panel">
@@ -79,6 +98,7 @@ export function EventOverviewPage() {
         <div className="path-counts">
           <span>{data.pathSummary.primaryPathCount} 条主路径</span>
           <span>{data.pathSummary.secondaryPathCount} 条次级路径</span>
+          <span>{data.pathSummary.keyNodeIds.length} 个关键节点</span>
         </div>
         <Link className="inline-link" to={`/events/${eventId}/map`}>
           查看传播地图
@@ -107,6 +127,39 @@ export function EventOverviewPage() {
                 <span>{assessment.evidenceCount} 证据</span>
               </div>
             </Link>
+          ))}
+        </div>
+      </section>
+
+      {data.nextActions.length > 0 ? (
+        <section className="panel full-span">
+          <div className="section-title">
+            <h2>推荐操作</h2>
+          </div>
+          <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+            {data.nextActions.map((action) => (
+              <a key={action.actionId} className="primary-button" href={action.href} target="_blank" rel="noreferrer">
+                {action.label} <ExternalLink size={14} />
+              </a>
+            ))}
+          </div>
+        </section>
+      ) : null}
+
+      <section className="panel full-span">
+        <div className="section-title">
+          <h2>推导策略</h2>
+        </div>
+        <div className="policy-list">
+          <div className="policy-item">
+            <p>{data.derivationPolicy.summary}</p>
+          </div>
+          {data.derivationPolicy.rules.map((rule) => (
+            <div key={rule.ruleId} className="policy-item">
+              <FactBadge factType={rule.factType} />
+              <strong>{rule.label}</strong>
+              <p>{rule.description}</p>
+            </div>
           ))}
         </div>
       </section>

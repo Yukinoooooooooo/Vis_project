@@ -1,6 +1,7 @@
+import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { PRODUCT_BRANDING } from "@risk-map/shared";
-import { ArrowRight, Database, ExternalLink, ShieldCheck } from "lucide-react";
+import { ArrowRight, ChevronDown, ChevronUp, Database, ExternalLink, ShieldCheck, Star } from "lucide-react";
 import { Link } from "react-router-dom";
 import { FactBadge } from "../components/FactBadge";
 import { LoadingState } from "../components/LoadingState";
@@ -11,6 +12,7 @@ import { getRadarView } from "../services/api";
 import { useWorkspaceContextSync } from "../hooks/useWorkspaceContextSync";
 
 export function RadarPage() {
+  const [sourcesExpanded, setSourcesExpanded] = useState(false);
   const query = useQuery({ queryKey: ["radarView"], queryFn: getRadarView });
   const data = query.data;
   useWorkspaceContextSync(
@@ -58,6 +60,7 @@ export function RadarPage() {
                   <SeverityBadge level={item.severityLevel} />
                   <span className="status-pill">{item.status}</span>
                   <FactBadge factType={item.factType} />
+                  {item.isInWatchlist ? <Star size={14} fill="currentColor" /> : null}
                 </div>
                 <h3>{item.title}</h3>
                 <p>{item.summary}</p>
@@ -69,6 +72,10 @@ export function RadarPage() {
                 <div className="card-footer">
                   <span>{item.affectedNodeCount} 联动节点 / {item.affectedCompanyCount} 点名对象</span>
                   <ArrowRight size={16} />
+                </div>
+                <div style={{ fontSize: 12, color: "var(--studio-muted)", display: "flex", gap: 12 }}>
+                  <span>发现：{new Date(item.firstObservedAt).toLocaleDateString()}</span>
+                  <span>更新：{item.latestChange}</span>
                 </div>
               </Link>
             ))}
@@ -100,7 +107,7 @@ export function RadarPage() {
           <Database size={18} />
         </div>
         <div className="source-list">
-          {data.items.slice(0, 8).map((item) => (
+          {data.items.slice(0, sourcesExpanded ? undefined : 8).map((item) => (
             <a key={item.eventId} href={item.sourceUrl} target="_blank" rel="noreferrer">
               <div>
                 <strong>{item.title}</strong>
@@ -110,6 +117,16 @@ export function RadarPage() {
             </a>
           ))}
         </div>
+        {data.items.length > 8 ? (
+          <button
+            className="secondary-button"
+            style={{ marginTop: 12, width: "100%" }}
+            onClick={() => setSourcesExpanded((v) => !v)}
+            type="button"
+          >
+            {sourcesExpanded ? <><ChevronUp size={16} /> 收起来源</> : <><ChevronDown size={16} /> 展开全部（{data.items.length}）</>}
+          </button>
+        ) : null}
       </section>
 
       <SourceTraceList traces={data.sourceTrace} />

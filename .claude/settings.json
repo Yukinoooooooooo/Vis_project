@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm install *)",
+      "Bash(npm run *)",
+      "Bash(./node_modules/.bin/tsc --noEmit -p apps/web/tsconfig.json)"
+    ]
+  }
+}

@@ -49,6 +49,9 @@ export function EvidencePage() {
           <JudgmentBadge level={data.assessment.judgmentLevel} />
           <EvidenceBadge level={data.assessment.evidenceLevel} />
         </div>
+        <div style={{ fontSize: 13, color: "var(--studio-muted)", marginTop: 4 }}>
+          上次复核：{new Date(data.assessment.lastReviewedAt).toLocaleString()}
+        </div>
       </div>
       <NoticePanel notices={data.partialDataNotice} />
 
@@ -61,9 +64,22 @@ export function EvidencePage() {
         <div className="uncertainty">
           <strong>边界</strong>
           <p>{data.uncertainty.nextSuggestedAction}</p>
-          {data.uncertainty.missingEvidenceTypes.map((item) => (
-            <span key={item}>{item}</span>
-          ))}
+          {data.uncertainty.missingEvidenceTypes.length > 0 ? (
+            <div style={{ marginTop: 8 }}>
+              <span style={{ fontSize: 12, color: "var(--studio-muted)", display: "block", marginBottom: 4 }}>缺失证据类型：</span>
+              <div className="tag-row">
+                {data.uncertainty.missingEvidenceTypes.map((item) => (
+                  <span key={item}>{item}</span>
+                ))}
+              </div>
+            </div>
+          ) : null}
+          {data.uncertainty.conflictNote ? (
+            <div style={{ marginTop: 8 }}>
+              <span style={{ fontSize: 12, color: "var(--studio-muted)", display: "block", marginBottom: 4 }}>冲突说明：</span>
+              <p style={{ color: "var(--studio-text)", margin: 0 }}>{data.uncertainty.conflictNote}</p>
+            </div>
+          ) : null}
         </div>
       </section>
 
@@ -78,15 +94,59 @@ export function EvidencePage() {
               <div className="card-topline">
                 <FactBadge factType={card.factType} />
                 <EvidenceBadge level={card.evidenceLevel} />
+                <span className="status-pill">{card.objectType}</span>
                 <span>{card.sourceName}</span>
               </div>
               <h3>{card.objectName}</h3>
               <p>{card.phenomenon}</p>
+              {card.quoteFields.length > 0 ? (
+                <div className="tag-row">
+                  {card.quoteFields.map((qf) => (
+                    <span key={qf}>{qf}</span>
+                  ))}
+                </div>
+              ) : null}
               <p className="boundary">{card.boundaryHint}</p>
-              <a className="inline-link" href={card.sourcePreviewUrl} target="_blank" rel="noreferrer">
-                打开来源 <ExternalLink size={14} />
-              </a>
+              <div className="card-footer" style={{ justifyContent: "space-between" }}>
+                <span style={{ fontSize: 12, color: "var(--studio-muted)" }}>
+                  捕获于 {new Date(card.capturedAt).toLocaleDateString()}
+                </span>
+                <a className="inline-link" href={card.sourcePreviewUrl} target="_blank" rel="noreferrer">
+                  打开来源 <ExternalLink size={14} />
+                </a>
+              </div>
             </article>
+          ))}
+        </div>
+      </section>
+
+      {data.comparison.compareTargetId ? (
+        <section className="panel full-span">
+          <div className="section-title">
+            <h2>对比分析</h2>
+          </div>
+          <p className="boundary">{data.comparison.differenceSummary}</p>
+          <div className="badge-row" style={{ marginTop: 8 }}>
+            <span className="status-pill">共用证据：{data.comparison.sharedEvidenceIds.length}</span>
+            <span className="status-pill">独占证据：{data.comparison.exclusiveEvidenceIds.length}</span>
+          </div>
+        </section>
+      ) : null}
+
+      <section className="panel full-span">
+        <div className="section-title">
+          <h2>推导策略</h2>
+        </div>
+        <div className="policy-list">
+          <div className="policy-item">
+            <p>{data.derivationPolicy.summary}</p>
+          </div>
+          {data.derivationPolicy.rules.map((rule) => (
+            <div key={rule.ruleId} className="policy-item">
+              <FactBadge factType={rule.factType} />
+              <strong>{rule.label}</strong>
+              <p>{rule.description}</p>
+            </div>
           ))}
         </div>
       </section>

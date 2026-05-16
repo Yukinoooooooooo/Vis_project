@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { Bell, ExternalLink } from "lucide-react";
+import { Link } from "react-router-dom";
 import { ErrorState } from "../components/ErrorState";
 import { LoadingState } from "../components/LoadingState";
 import { NoticePanel } from "../components/NoticePanel";
@@ -47,14 +48,24 @@ export function WatchPage() {
         </div>
         <div className="watch-list">
           {data.items.map((item) => (
-            <a key={item.watchId} href={item.sourceUrl} target="_blank" rel="noreferrer">
-              <div>
-                <strong>{item.targetName}</strong>
-                <span>{item.targetType} / {item.status}</span>
-                <p>{item.latestSignal}</p>
-              </div>
-              <ExternalLink size={15} />
-            </a>
+            item.targetType === "event" ? (
+              <Link key={item.watchId} to={`/events/${item.targetId}/overview`}>
+                <div>
+                  <strong>{item.targetName}</strong>
+                  <span>{item.targetType} / {item.status}</span>
+                  <p>{item.latestSignal}</p>
+                </div>
+              </Link>
+            ) : (
+              <a key={item.watchId} href={item.sourceUrl} target="_blank" rel="noreferrer">
+                <div>
+                  <strong>{item.targetName}</strong>
+                  <span>{item.targetType} / {item.status}</span>
+                  <p>{item.latestSignal}</p>
+                </div>
+                <ExternalLink size={15} />
+              </a>
+            )
           ))}
         </div>
       </section>
